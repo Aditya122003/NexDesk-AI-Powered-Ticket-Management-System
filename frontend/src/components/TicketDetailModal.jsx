@@ -61,7 +61,8 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
   const getAttachmentUrl = (urlPath) => {
     if (!urlPath) return '#';
     if (urlPath.startsWith('http')) return urlPath;
-    return `http://localhost:5000${urlPath}`;
+    const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+    return `${apiBase}${urlPath}`;
   };
 
   return (
