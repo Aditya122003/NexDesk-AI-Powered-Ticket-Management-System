@@ -11,7 +11,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 1. Landing Page & Authentication Portal
-<img src="backend/uploads/Website-Asset/landing-page-hero.png" alt="NexDesk Landing Page & Authentication Portal" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/landing-page-hero.png" alt="NexDesk Landing Page & Authentication Portal" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Modern Announcement Bar**: Live system status badge highlighting the active AI-Powered Smart Ticket Management Engine.
@@ -22,7 +22,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 2. Groq AI Auto-Triage & Support Agent Assistance
-<img src="backend/uploads/Website-Asset/ai-triage-assistance.png" alt="Groq AI Auto-Triage & Hybrid Support Assistance" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/ai-triage-assistance.png" alt="Groq AI Auto-Triage & Hybrid Support Assistance" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Groq Llama-3 AI Triage**: Automatically evaluates support ticket titles and descriptions to assign categories (`Technical`, `Billing`, `Account`, `Feature Request`, `General`) and calculate severity levels (`Urgent`, `High`, `Medium`, `Low`).
@@ -32,7 +32,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 3. Automated Support Workflow & Bank-Grade Security
-<img src="backend/uploads/Website-Asset/workflow-and-governance.png" alt="Automated Support Workflow & Enterprise Governance" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/workflow-and-governance.png" alt="Automated Support Workflow & Enterprise Governance" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **End-to-End Automated Workflow**:
@@ -45,7 +45,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 4. Superadmin Control Center & Governance Portal
-<img src="backend/uploads/Website-Asset/superadmin-control-center.png" alt="Superadmin Control Center & User Governance" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/superadmin-control-center.png" alt="Superadmin Control Center & User Governance" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Superadmin Command Center**: Executive cockpit providing top-level metrics for Pending Admin Approvals, Approved Admin Accounts, Total Registered Customers, and Total System Tickets.
@@ -55,7 +55,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 5. System Analytics Hub & Live Performance Monitoring
-<img src="backend/uploads/Website-Asset/system-analytics-hub.png" alt="System Analytics Hub" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/system-analytics-hub.png" alt="System Analytics Hub" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Live Ticket Stream**: Real-time counter tracking total created tickets, total resolved tickets, active in-progress queue, and open ticket volumes.
@@ -65,7 +65,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 6. Advanced Analytics & Visualization Suite
-<img src="backend/uploads/Website-Asset/analytics-visualization-charts.png" alt="Resolution Timeline & Analytics Charts" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/analytics-visualization-charts.png" alt="Resolution Timeline & Analytics Charts" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Interactive Resolution Timeline**: Recharts-powered interactive chart with multi-mode display (**Bar Columns**, **Area Wave**, **Line Graph**) and time-span filters (**1D**, **7D**, **1M**, **3M**, **6M**, **1Y**, **ALL**).
@@ -77,7 +77,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 7. Superadmin Account Profile & AI Avatar Management
-<img src="backend/uploads/Website-Asset/superadmin-profile-avatar-modal.png" alt="Superadmin Account Profile & AI Avatar Modal" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/superadmin-profile-avatar-modal.png" alt="Superadmin Account Profile & AI Avatar Modal" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Profile Management Modal**: Allows Superadmins and system users to update personal details, full names, and profile avatars.
@@ -87,7 +87,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 ---
 
 ### 8. System Ticket Repository & Superadmin Overview
-<img src="backend/uploads/Website-Asset/image.png" alt="NexDesk System Ticket Repository" style="border: 2px solid #cbd5e1; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 100%; margin: 10px 0;" />
+<kbd><img src="backend/uploads/Website-Asset/image.png" alt="NexDesk System Ticket Repository" width="100%"></kbd>
 
 #### Explanation & Key Features:
 * **Time-Bound Ticket Filtering**: Toggle ticket display using preset options (**1 Month**, **2 Months by Default**, **All Time**) or **Custom Date Range**.
@@ -150,7 +150,7 @@ npm install
 
 ---
 
-## 🚀 Running the Application
+## Running the Application
 
 ### Development Mode
 
