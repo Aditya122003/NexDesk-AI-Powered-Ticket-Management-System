@@ -1,0 +1,25 @@
+{
+  "name": "mern-helpdesk-system",
+  "version": "1.0.0",
+  "description": "Enterprise MERN Stack Helpdesk & Support Ticket System with Groq LLM Triage & Admin Analytics",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "server": "npm --prefix backend start",
+    "server:dev": "npm --prefix backend run dev",
+    "client": "npm --prefix frontend run dev",
+    "seed": "npm --prefix backend run seed",
+    "test": "npm --prefix backend test",
+    "build": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "mern",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "groq-llm",
+    "ticket-system",
+    "helpdesk",
+    "recharts"
+  ]
+}
