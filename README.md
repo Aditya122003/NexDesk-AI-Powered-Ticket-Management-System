@@ -20,7 +20,7 @@
 
 ## Executive Summary & Application Screenshots
 
-NexDesk streamlines enterprise support operations by uniting automated AI ticket classification with strict multi-tier governance. Incoming support tickets are analyzed in real time by the **Groq LLM engine** to predict ticket categories, assign priority levels, and generate audit reasoning logs. The platform supports three core roles—**Customer**, **Admin**, and **Superadmin**—each with dedicated workspace dashboards and security privileges.
+**NexDesk** is a smart MERN-stack helpdesk platform that uses **Groq AI (LLM)** to automatically classify, prioritize, and summarize customer support tickets in real time, featuring role-based dashboards for Customers, Support Admins, and Superadmins.
 
 ---
 
