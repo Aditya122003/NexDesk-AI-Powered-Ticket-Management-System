@@ -2,15 +2,19 @@
 
 An enterprise-grade, full-stack MERN (MongoDB, Express.js, React, Node.js) helpdesk platform featuring **Groq LLM AI Auto-Triage**, **Multi-Tier Role-Based Access Control (RBAC)**, **Superadmin Governance & Admin Approval Workflows**, **Nodemailer Gmail SMTP Integration**, **Google OAuth 2.0 Authentication**, **Recharts Data Visualization**, and **Real-Time Classification Audit Logging**.
 
-> 🚀 **LIVE DEMO WEBSITE**: **[https://nex-desk-ai-powered-ticket-manageme.vercel.app](https://nex-desk-ai-powered-ticket-manageme.vercel.app)**
-> 
-> 📌 **DEMO ACCESS CREDENTIALS** *(This is a public demo project to explore full system features and administrative governance)*:
->
-> | Role | Email | Password | Access & Features |
-> | :--- | :--- | :--- | :--- |
-> | 👑 **Superadmin** | `adityatiwari5175@gmail.com` | `Aditya@1234` | Full system governance, Admin approval/rejection cockpit, user management, and ticket control |
-> | 👨‍💻 **Admin** | `admin@helpdesk.com` | `Admin@1234` | Ticket status timeline management, analytics, category audit |
-> | 👤 **Customer** | `john.doe@example.com` | `Customer@1234` | Raise support tickets with attachments, track issue timeline |
+---
+
+### Production Deployment & Public Demo Access
+
+**Live Application URL**: **[https://nex-desk-ai-powered-ticket-manageme.vercel.app](https://nex-desk-ai-powered-ticket-manageme.vercel.app)**
+
+*This public demonstration environment is configured for evaluators, recruiters, and reviewers to test all system features and role-based workflows.*
+
+| Account Role | Email Address | Account Password | Granted Access & Privileges |
+| :--- | :--- | :--- | :--- |
+| **Superadmin** | `adityatiwari5175@gmail.com` | `Aditya@1234` | Full system governance, Admin approval/rejection cockpit, user management, and ticket control |
+| **Admin** | `admin@helpdesk.com` | `Admin@1234` | Ticket status timeline management, analytics dashboard, category audit |
+| **Customer** | `john.doe@example.com` | `Customer@1234` | Create support tickets with file attachments, track issue status timeline |
 
 ---
 
@@ -106,7 +110,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 
 ---
 
-## 🛠 Technology Stack
+## Technology Stack
 
 | Layer | Technologies & Libraries |
 | :--- | :--- |
@@ -118,7 +122,7 @@ NexDesk streamlines enterprise support operations by uniting automated AI ticket
 
 ---
 
-## ⚙️ Installation & Setup Guide
+## Installation & Setup Guide
 
 ### Step 1: Clone Repository
 ```bash
@@ -182,7 +186,7 @@ npm run dev
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Ticket System/
@@ -211,6 +215,6 @@ Ticket System/
 
 ---
 
-## 📜 License
+## License
 
 This project is released under the **MIT License**.
