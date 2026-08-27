@@ -2,6 +2,16 @@
 
 An enterprise-grade, full-stack MERN (MongoDB, Express.js, React, Node.js) helpdesk platform featuring **Groq LLM AI Auto-Triage**, **Multi-Tier Role-Based Access Control (RBAC)**, **Superadmin Governance & Admin Approval Workflows**, **Nodemailer Gmail SMTP Integration**, **Google OAuth 2.0 Authentication**, **Recharts Data Visualization**, and **Real-Time Classification Audit Logging**.
 
+> 🚀 **LIVE DEMO WEBSITE**: **[https://nex-desk-ai-powered-ticket-manageme.vercel.app](https://nex-desk-ai-powered-ticket-manageme.vercel.app)**
+> 
+> 📌 **DEMO ACCESS CREDENTIALS** *(This is a public demo project to explore full system features and administrative governance)*:
+>
+> | Role | Email | Password | Access & Features |
+> | :--- | :--- | :--- | :--- |
+> | 👑 **Superadmin** | `adityatiwari5175@gmail.com` | `Aditya@1234` | Full system governance, Admin approval/rejection cockpit, user management, and ticket control |
+> | 👨‍💻 **Admin** | `admin@helpdesk.com` | `Admin@1234` | Ticket status timeline management, analytics, category audit |
+> | 👤 **Customer** | `john.doe@example.com` | `Customer@1234` | Raise support tickets with attachments, track issue timeline |
+
 ---
 
 ## Executive Summary & Application Screenshots
