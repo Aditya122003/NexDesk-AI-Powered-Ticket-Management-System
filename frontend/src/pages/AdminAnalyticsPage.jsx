@@ -6,6 +6,7 @@ import CategoryChart from '../components/Charts/CategoryChart';
 import TrendLineChart from '../components/Charts/TrendLineChart';
 import ChartHeaderMenu from '../components/Charts/ChartHeaderMenu';
 import ClassificationLogsModal from '../components/ClassificationLogsModal';
+import LoadingSpinner from '../components/LoadingSpinner';
 import html2canvas from 'html2canvas';
 import {
   BarChart3, TrendingUp, CheckCircle, Clock, Users, ArrowLeft, RefreshCw,
@@ -77,12 +78,7 @@ const AdminAnalyticsPage = () => {
   }, [timelineRange, chartType]);
 
   if (loading) {
-    return (
-      <div style={{ padding: '5rem', textAlign: 'center', color: '#64748b' }}>
-        <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid #e2e8f0', borderTop: '4px solid #032d1f', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }}></div>
-        <h3 style={{ color: '#0f172a', fontWeight: 800 }}>Generating NexDesk System Analytics...</h3>
-      </div>
-    );
+    return <LoadingSpinner message="Generating NexDesk System Analytics & AI Triage Insights..." fullPage={true} />;
   }
 
   const { metrics, statusBreakdown, priorityBreakdown, categoryBreakdown, timelineData } = analytics || {};

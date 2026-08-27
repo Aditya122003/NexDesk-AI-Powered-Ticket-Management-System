@@ -5,6 +5,7 @@ import TicketCard from '../components/TicketCard';
 import CreateTicketModal from '../components/CreateTicketModal';
 import TicketDetailModal from '../components/TicketDetailModal';
 import CustomDateModal from '../components/CustomDateModal';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { Plus, Search, Filter, RefreshCw, Ticket as TicketIcon, Clock, CheckCircle2, AlertCircle, Calendar } from 'lucide-react';
 
 const CustomerDashboard = () => {
@@ -309,10 +310,7 @@ const CustomerDashboard = () => {
 
       {/* Tickets List / Empty State / Loading State */}
       {loading ? (
-        <div style={{ padding: '4rem', textAlign: 'center', color: '#64748b' }}>
-          <div className="spinner" style={{ width: '36px', height: '36px', border: '3px solid #cbd5e1', borderTop: '3px solid #032d1f', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }}></div>
-          Loading your support tickets...
-        </div>
+        <LoadingSpinner message="Loading your support tickets..." fullPage={false} />
       ) : tickets.length === 0 ? (
         <div
           style={{

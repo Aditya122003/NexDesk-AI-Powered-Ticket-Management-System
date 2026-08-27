@@ -6,6 +6,7 @@ import { useNotification } from '../context/NotificationContext';
 import TicketCard from '../components/TicketCard';
 import TicketDetailModal from '../components/TicketDetailModal';
 import CustomDateModal from '../components/CustomDateModal';
+import LoadingSpinner from '../components/LoadingSpinner';
 import {
   Search, Filter, RefreshCw, BarChart3, Shield, Ticket as TicketIcon,
   CheckCircle, XCircle, UserCheck, Crown, Users, Trash2, Mail,
@@ -653,19 +654,16 @@ const AdminDashboard = () => {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  backgroundColor: 'rgba(255, 255, 255, 0.75)',
-                  backdropFilter: 'blur(3px)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                  backdropFilter: 'blur(4px)',
                   zIndex: 20,
                   display: 'flex',
-                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderRadius: '16px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
+                  borderRadius: '16px'
                 }}
               >
-                <div className="spinner" style={{ width: '36px', height: '36px', border: '3px solid #cbd5e1', borderTop: '3px solid #032d1f', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '0.75rem' }}></div>
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#032d1f' }}>Updating tickets view...</span>
+                <LoadingSpinner message="Fetching & Syncing NexDesk Tickets..." fullPage={false} />
               </div>
             )}
 
