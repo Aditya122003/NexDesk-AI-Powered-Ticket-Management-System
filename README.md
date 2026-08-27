@@ -1,6 +1,8 @@
 # NexDesk — AI-Powered Helpdesk & Smart Ticket Management System
 
-An enterprise-grade, full-stack MERN (MongoDB, Express.js, React, Node.js) helpdesk platform featuring **Groq LLM AI Auto-Triage**, **Multi-Tier Role-Based Access Control (RBAC)**, **Superadmin Governance & Admin Approval Workflows**, **Nodemailer Gmail SMTP Integration**, **Google OAuth 2.0 Authentication**, **Recharts Data Visualization**, and **Real-Time Classification Audit Logging**.
+**NexDesk** is an AI-powered customer support and ticket management platform built with the MERN stack. When customers submit a support request, integrated **Groq AI (LLM)** instantly reads the issue—automatically assigning its category (Technical, Billing, Account, etc.), setting the urgency priority (Urgent, High, Medium, Low), and generating a concise summary with AI audit reasoning. 
+
+The system provides dedicated workspaces for **Customers** (to raise & track tickets), **Admins** (to resolve issues & view system analytics), and **Superadmins** (to approve new admin accounts & govern the entire workspace).
 
 ---
 
