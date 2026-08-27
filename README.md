@@ -1,7 +1,5 @@
 # NexDesk — AI-Powered Helpdesk & Smart Ticket Management System
 
-> **NexDesk** is a smart MERN-stack helpdesk platform that uses Groq AI (LLM) to automatically classify, prioritize, and summarize customer support tickets in real time, featuring role-based dashboards for Customers, Support Admins, and Superadmins.
-
 ---
 
 ### Production Deployment & Public Demo Access
