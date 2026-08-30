@@ -115,8 +115,10 @@ const approveAdmin = async (req, res, next) => {
     user.isApproved = true;
     await user.save();
 
-    // Trigger Approval Email Notification
-    await sendAdminApprovalEmail(user.email, user.name);
+    // Trigger Approval Email Notification in background (non-blocking for fast response)
+    sendAdminApprovalEmail(user.email, user.name).catch(err => {
+      console.error('[AdminController] Non-blocking approval email error:', err.message);
+    });
 
     res.json({
       success: true,
@@ -154,8 +156,10 @@ const rejectAdmin = async (req, res, next) => {
     user.isApproved = true;
     await user.save();
 
-    // Trigger Disapproval Email Notification with Reason
-    await sendAdminDisapprovalEmail(user.email, user.name, reason || 'Admin privileges not approved.');
+    // Trigger Disapproval Email Notification in background
+    sendAdminDisapprovalEmail(user.email, user.name, reason || 'Admin privileges not approved.').catch(err => {
+      console.error('[AdminController] Non-blocking disapproval email error:', err.message);
+    });
 
     res.json({
       success: true,

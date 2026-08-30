@@ -26,6 +26,7 @@ const AdminDashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
   const [isDeletingUser, setIsDeletingUser] = useState(false);
+  const [approvingAdminId, setApprovingAdminId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -129,15 +130,19 @@ const AdminDashboard = () => {
 
   // Approve Admin Action
   const handleApproveAdmin = async (adminId, adminName, adminEmail) => {
+    setApprovingAdminId(adminId);
     try {
       const res = await API.put(`/admin/approve-admin/${adminId}`);
       if (res.data.success) {
         showToast(`Approved ${adminName} as Admin! Email notification sent to ${adminEmail}`, 'success');
+        setPendingAdmins(prev => prev.filter(p => p._id !== adminId));
         fetchPendingAdmins();
         fetchAllUsers();
       }
     } catch (error) {
       showToast(error.response?.data?.message || 'Failed to approve admin', 'error');
+    } finally {
+      setApprovingAdminId(null);
     }
   };
 
@@ -395,21 +400,23 @@ const AdminDashboard = () => {
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <button
                     onClick={() => handleApproveAdmin(pAdmin._id, pAdmin.name, pAdmin.email)}
+                    disabled={approvingAdminId === pAdmin._id}
                     style={{
-                      backgroundColor: '#10b981',
+                      backgroundColor: approvingAdminId === pAdmin._id ? '#9ca3af' : '#10b981',
                       color: '#ffffff',
                       fontWeight: 800,
                       border: 'none',
                       borderRadius: '6px',
                       padding: '6px 12px',
                       fontSize: '0.75rem',
-                      cursor: 'pointer',
+                      cursor: approvingAdminId === pAdmin._id ? 'not-allowed' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '4px'
+                      gap: '4px',
+                      opacity: approvingAdminId === pAdmin._id ? 0.7 : 1
                     }}
                   >
-                    <CheckCircle size={14} /> Approve
+                    <CheckCircle size={14} /> {approvingAdminId === pAdmin._id ? 'Approving...' : 'Approve'}
                   </button>
                   <button
                     onClick={() => handleRejectAdmin(pAdmin._id, pAdmin.name)}

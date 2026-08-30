@@ -34,6 +34,7 @@ const SuperadminDashboard = () => {
   const [disapproveAdmin, setDisapproveAdmin] = useState(null);
   const [disapproveReason, setDisapproveReason] = useState('');
   const [disapproving, setDisapproving] = useState(false);
+  const [approvingId, setApprovingId] = useState(null);
 
   // Fetch All System Users
   const fetchUsers = useCallback(async () => {
@@ -101,14 +102,18 @@ const SuperadminDashboard = () => {
 
   // ACTION 1: Approve Admin Request (Sends Approval Email)
   const handleApproveAdmin = async (adminId, adminName, adminEmail) => {
+    setApprovingId(adminId);
     try {
       const res = await API.put(`/admin/approve-admin/${adminId}`);
       if (res.data.success) {
-        showToast(`Approved ${adminName} as Admin! Approval email sent to ${adminEmail}`, 'success');
+        showToast(`Approved ${adminName} as Admin! Email notification sent to ${adminEmail}`, 'success');
+        setPendingAdmins(prev => prev.filter(p => p._id !== adminId));
         refreshAll();
       }
     } catch (error) {
       showToast(error.response?.data?.message || 'Failed to approve admin', 'error');
+    } finally {
+      setApprovingId(null);
     }
   };
 
@@ -483,22 +488,24 @@ const SuperadminDashboard = () => {
                         {/* APPROVE ACTION BUTTON */}
                         <button
                           onClick={() => handleApproveAdmin(pAdmin._id, pAdmin.name, pAdmin.email)}
+                          disabled={approvingId === pAdmin._id}
                           style={{
-                            backgroundColor: '#10b981',
+                            backgroundColor: approvingId === pAdmin._id ? '#9ca3af' : '#10b981',
                             color: '#ffffff',
                             fontWeight: 800,
                             border: 'none',
                             borderRadius: '8px',
                             padding: '6px 14px',
                             fontSize: '0.8rem',
-                            cursor: 'pointer',
+                            cursor: approvingId === pAdmin._id ? 'not-allowed' : 'pointer',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '5px'
+                            gap: '5px',
+                            opacity: approvingId === pAdmin._id ? 0.7 : 1
                           }}
                           title="Approve Admin Role & Email Login Link"
                         >
-                          <CheckCircle size={14} /> Approve
+                          <CheckCircle size={14} /> {approvingId === pAdmin._id ? 'Approving...' : 'Approve'}
                         </button>
 
                         {/* DISAPPROVE ACTION BUTTON (OPENS REASON MODAL) */}
