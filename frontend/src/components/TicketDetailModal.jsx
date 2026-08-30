@@ -149,7 +149,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
                 }}
               >
                 <div style={{ fontWeight: 800, color: '#7e22ce', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', marginBottom: '4px' }}>
-                  <Sparkles size={16} /> Groq LLM Triage Intelligence
+                  <Sparkles size={16} /> Summary by Groq
                 </div>
                 <p style={{ fontSize: '0.85rem', color: '#581c87', margin: 0, lineHeight: 1.45, fontWeight: 600 }}>
                   {ticket.aiReasoning}
