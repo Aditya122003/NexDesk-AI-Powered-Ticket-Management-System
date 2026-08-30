@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
+import AdminPendingModal from '../components/AdminPendingModal';
 import { Sparkles, User, Mail, Lock, Shield, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 
 const RegisterPage = () => {
@@ -14,6 +15,9 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('customer');
   const [loading, setLoading] = useState(false);
+
+  const [isAdminPendingOpen, setIsAdminPendingOpen] = useState(false);
+  const [pendingModalData, setPendingModalData] = useState({ name: '', email: '', message: '' });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +47,17 @@ const RegisterPage = () => {
       const res = await register(name, email, password, role);
       if (res.pendingApproval) {
         showToast(res.message || 'Admin registration submitted! Awaiting Superadmin approval.', 'info');
-        navigate('/login');
+        setPendingModalData({
+          name,
+          email,
+          message: res.message
+        });
+        setIsAdminPendingOpen(true);
+        // Reset form fields
+        setName('');
+        setEmail('');
+        setPassword('');
+        setRole('customer');
       } else if (res.success) {
         showToast(`Account created successfully as ${role.toUpperCase()}!`, 'success');
         navigate(res.user.role === 'admin' || res.user.role === 'superadmin' ? '/admin' : '/dashboard');
@@ -208,6 +222,17 @@ const RegisterPage = () => {
           </Link>
         </div>
       </div>
+
+      <AdminPendingModal
+        isOpen={isAdminPendingOpen}
+        onClose={() => {
+          setIsAdminPendingOpen(false);
+          navigate('/login');
+        }}
+        userName={pendingModalData.name}
+        userEmail={pendingModalData.email}
+        message={pendingModalData.message}
+      />
     </div>
   );
 };

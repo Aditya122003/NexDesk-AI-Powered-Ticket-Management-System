@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import { GoogleLogin } from '@react-oauth/google';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
+import AdminPendingModal from '../components/AdminPendingModal';
 import NexDeskLogo from '../components/NexDeskLogo';
 import {
   Sparkles, CheckCircle2, ArrowRight, Shield, Zap, Bot, Mail, Lock,
@@ -33,6 +34,8 @@ const LandingPage = ({ initialMode = 'login' }) => {
 
   const [activeSection, setActiveSection] = useState('about');
   const [isForgotOpen, setIsForgotOpen] = useState(false);
+  const [isAdminPendingOpen, setIsAdminPendingOpen] = useState(false);
+  const [pendingModalData, setPendingModalData] = useState({ name: '', email: '', message: '' });
 
   // Automatic Navbar ScrollSpy Highlight logic
   useEffect(() => {
@@ -123,7 +126,17 @@ const LandingPage = ({ initialMode = 'login' }) => {
       const res = await register(regName, regEmail, regPassword, regRole);
       if (res.pendingApproval) {
         showToast(res.message || 'Admin registration submitted! Awaiting Superadmin approval.', 'info');
-        setAuthMode('login');
+        setPendingModalData({
+          name: regName,
+          email: regEmail,
+          message: res.message
+        });
+        setIsAdminPendingOpen(true);
+        // Reset registration form
+        setRegName('');
+        setRegEmail('');
+        setRegPassword('');
+        setRegRole('customer');
       } else if (res.success) {
         showToast(`Account created successfully as ${regRole.toUpperCase()}!`, 'success');
         navigate(res.user.role === 'admin' || res.user.role === 'superadmin' ? '/admin' : '/dashboard');
@@ -1213,6 +1226,16 @@ const LandingPage = ({ initialMode = 'login' }) => {
       </footer>
 
       <ForgotPasswordModal isOpen={isForgotOpen} onClose={() => setIsForgotOpen(false)} />
+      <AdminPendingModal
+        isOpen={isAdminPendingOpen}
+        onClose={() => {
+          setIsAdminPendingOpen(false);
+          setAuthMode('login');
+        }}
+        userName={pendingModalData.name}
+        userEmail={pendingModalData.email}
+        message={pendingModalData.message}
+      />
     </div>
   );
 };
