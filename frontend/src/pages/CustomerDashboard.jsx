@@ -5,16 +5,21 @@ import TicketCard from '../components/TicketCard';
 import CreateTicketModal from '../components/CreateTicketModal';
 import TicketDetailModal from '../components/TicketDetailModal';
 import CustomDateModal from '../components/CustomDateModal';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { Plus, Search, Filter, RefreshCw, Ticket as TicketIcon, Clock, CheckCircle2, AlertCircle, Calendar } from 'lucide-react';
+import PriorityBadge from '../components/PriorityBadge';
+import CategoryBadge from '../components/CategoryBadge';
+import { useNotification } from '../context/NotificationContext';
+import { Plus, Search, Filter, RefreshCw, Ticket as TicketIcon, Clock, CheckCircle2, AlertCircle, Calendar, LayoutGrid, List, Download } from 'lucide-react';
 
 const CustomerDashboard = () => {
   const { user } = useAuth();
+  const { showToast } = useNotification();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [ticketViewMode, setTicketViewMode] = useState('grid'); // 'grid' | 'list'
 
   // Date Range Filter State (Default: 2 Months)
   const [dateRange, setDateRange] = useState('2M'); // '1M' | '2M' | 'custom' | 'all'
@@ -52,6 +57,7 @@ const CustomerDashboard = () => {
         search,
         status: statusFilter,
         priority: priorityFilter,
+        category: categoryFilter,
         startDate,
         endDate
       };
@@ -67,7 +73,36 @@ const CustomerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [dateRange, customStartDate, customEndDate, search, statusFilter, priorityFilter]);
+  }, [dateRange, customStartDate, customEndDate, search, statusFilter, priorityFilter, categoryFilter]);
+
+  const exportTicketsToCSV = () => {
+    if (!tickets || tickets.length === 0) {
+      showToast('No tickets available to export', 'info');
+      return;
+    }
+    const headers = ['Ticket ID', 'Title', 'Customer Name', 'Customer Email', 'Category', 'Customer Priority', 'AI Classified Priority', 'Status', 'AI Triaged', 'Created Date'];
+    const rows = tickets.map(t => [
+      `"${t.ticketId}"`,
+      `"${(t.title || '').replace(/"/g, '""')}"`,
+      `"${(t.customer?.name || '').replace(/"/g, '""')}"`,
+      `"${(t.customer?.email || '').replace(/"/g, '""')}"`,
+      `"${t.category || ''}"`,
+      `"${t.customerPriority || t.priority || ''}"`,
+      `"${t.priority || ''}"`,
+      `"${t.status || ''}"`,
+      `"${t.aiTriaged ? 'Yes' : 'No'}"`,
+      `"${new Date(t.createdAt).toLocaleDateString()}"`
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `Tickets_Repository_Export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Exported tickets list to CSV!', 'success');
+  };
 
   useEffect(() => {
     fetchTickets();
@@ -207,6 +242,82 @@ const CustomerDashboard = () => {
             <option value="High">High</option>
             <option value="Urgent">Urgent</option>
           </select>
+
+          <select
+            className="form-control"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            style={{ width: '140px' }}
+          >
+            <option value="">All Categories</option>
+            <option value="Technical">Technical</option>
+            <option value="Billing">Billing</option>
+            <option value="Account">Account</option>
+            <option value="Feature Request">Feature Request</option>
+            <option value="General">General</option>
+          </select>
+
+          {/* View Mode Switcher */}
+          <div style={{ display: 'flex', backgroundColor: '#f1f5f9', borderRadius: '8px', padding: '3px', border: '1px solid #cbd5e1' }}>
+            <button
+              type="button"
+              onClick={() => setTicketViewMode('grid')}
+              style={{
+                padding: '5px 10px',
+                borderRadius: '6px',
+                border: 'none',
+                backgroundColor: ticketViewMode === 'grid' ? '#047857' : 'transparent',
+                color: ticketViewMode === 'grid' ? '#ffffff' : '#64748b',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '0.8rem',
+                fontWeight: 700
+              }}
+              title="Grid Cards View"
+            >
+              <LayoutGrid size={15} /> Grid
+            </button>
+            <button
+              type="button"
+              onClick={() => setTicketViewMode('list')}
+              style={{
+                padding: '5px 10px',
+                borderRadius: '6px',
+                border: 'none',
+                backgroundColor: ticketViewMode === 'list' ? '#047857' : 'transparent',
+                color: ticketViewMode === 'list' ? '#ffffff' : '#64748b',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '0.8rem',
+                fontWeight: 700
+              }}
+              title="List Table View"
+            >
+              <List size={15} /> List
+            </button>
+          </div>
+
+          {/* Export CSV Button */}
+          <button
+            type="button"
+            onClick={exportTicketsToCSV}
+            className="btn btn-secondary"
+            style={{
+              padding: '0.5rem 0.85rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '0.825rem',
+              fontWeight: 700
+            }}
+            title="Export Filtered Tickets to CSV"
+          >
+            <Download size={15} /> Export CSV
+          </button>
 
           {/* Date Range Selector Pill Strip (Default: 2 Months) */}
           <div style={{ display: 'flex', gap: '3px', backgroundColor: '#f1f5f9', padding: '3px', borderRadius: '8px', border: '1px solid #cbd5e1', alignItems: 'center' }}>
@@ -351,7 +462,7 @@ const CustomerDashboard = () => {
             <Plus size={16} /> Create Support Ticket
           </button>
         </div>
-      ) : (
+      ) : ticketViewMode === 'grid' ? (
         <div className="grid-tickets">
           {tickets.map((ticket) => (
             <TicketCard
@@ -361,6 +472,79 @@ const CustomerDashboard = () => {
               onTicketDeleted={() => fetchTickets()}
             />
           ))}
+        </div>
+      ) : (
+        /* List View Table */
+        <div style={{ backgroundColor: '#ffffff', borderRadius: '16px', border: '1.5px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '2px solid #e2e8f0', color: '#334155', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                <th style={{ padding: '1rem 1.25rem' }}>Ticket ID</th>
+                <th style={{ padding: '1rem 1.25rem' }}>Title & Description</th>
+                <th style={{ padding: '1rem 1.25rem' }}>Customer</th>
+                <th style={{ padding: '1rem 1.25rem' }}>Category</th>
+                <th style={{ padding: '1rem 1.25rem' }}>Priority</th>
+                <th style={{ padding: '1rem 1.25rem' }}>Status</th>
+                <th style={{ padding: '1rem 1.25rem' }}>Created</th>
+                <th style={{ padding: '1rem 1.25rem', textAlign: 'right' }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tickets.map((t) => (
+                <tr key={t._id} style={{ borderBottom: '1px solid #e2e8f0', fontSize: '0.875rem' }}>
+                  <td style={{ padding: '1rem 1.25rem', fontWeight: 900, color: '#047857', fontFamily: 'monospace' }}>
+                    {t.ticketId}
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem', maxWidth: '300px' }}>
+                    <div style={{ fontWeight: 800, color: '#0f172a', marginBottom: '2px' }}>{t.title}</div>
+                    <div style={{ fontSize: '0.78rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {t.description}
+                    </div>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <div style={{ fontWeight: 700, color: '#334155' }}>{t.customer?.name || 'Customer'}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{t.customer?.email}</div>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <CategoryBadge category={t.category} />
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
+                      <PriorityBadge priority={t.customerPriority || t.priority || 'Medium'} type="customer" />
+                      <PriorityBadge priority={t.priority || 'Medium'} type="ai" />
+                    </div>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem' }}>
+                    <span
+                      style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        padding: '4px 10px',
+                        borderRadius: '12px',
+                        backgroundColor: t.status === 'Resolved' ? '#dcfce7' : t.status === 'In Progress' ? '#fef3c7' : '#eff6ff',
+                        color: t.status === 'Resolved' ? '#15803d' : t.status === 'In Progress' ? '#b45309' : '#1d4ed8',
+                        border: `1px solid ${t.status === 'Resolved' ? '#86efac' : t.status === 'In Progress' ? '#fde68a' : '#bfdbfe'}`
+                      }}
+                    >
+                      {t.status}
+                    </span>
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem', fontSize: '0.8rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                    {new Date(t.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </td>
+                  <td style={{ padding: '1rem 1.25rem', textAlign: 'right' }}>
+                    <button
+                      onClick={() => setSelectedTicket(t)}
+                      className="btn btn-secondary"
+                      style={{ padding: '5px 10px', fontSize: '0.75rem' }}
+                    >
+                      View / Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
