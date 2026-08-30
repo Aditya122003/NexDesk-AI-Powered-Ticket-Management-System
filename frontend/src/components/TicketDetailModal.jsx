@@ -49,6 +49,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
         showToast(`Ticket details updated successfully`, 'success');
         onTicketUpdated(res.data.data);
         setStatusNote('');
+        onClose();
       }
     } catch (error) {
       console.error('[TicketDetail] Status update error:', error);
