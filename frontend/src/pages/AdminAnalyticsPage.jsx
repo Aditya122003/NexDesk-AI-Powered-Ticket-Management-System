@@ -132,27 +132,6 @@ const AdminAnalyticsPage = () => {
             </span>
           </div>
         </div>
-
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button
-            onClick={fetchAnalytics}
-            style={{
-              backgroundColor: '#032d1f',
-              color: '#a3e635',
-              fontWeight: 800,
-              fontSize: '0.875rem',
-              padding: '0.6rem 1.2rem',
-              borderRadius: '9999px',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <RefreshCw size={16} /> Refresh Metrics
-          </button>
-        </div>
       </div>
 
       {/* Top Key Metrics Strip - Moved to Top with Shortened Labels */}

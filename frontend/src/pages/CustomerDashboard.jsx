@@ -306,10 +306,6 @@ const CustomerDashboard = () => {
               <span>{customStartDate} to {customEndDate}</span>
             </div>
           )}
-
-          <button onClick={fetchTickets} className="btn btn-secondary" style={{ padding: '0.75rem' }} title="Refresh Tickets">
-            <RefreshCw size={16} />
-          </button>
         </div>
       </div>
 

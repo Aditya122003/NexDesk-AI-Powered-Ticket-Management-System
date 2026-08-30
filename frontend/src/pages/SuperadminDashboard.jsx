@@ -228,24 +228,6 @@ const SuperadminDashboard = () => {
           >
             <BarChart3 size={16} /> System Analytics
           </button>
-          <button
-            onClick={refreshAll}
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.15)',
-              color: '#ffffff',
-              fontWeight: 700,
-              fontSize: '0.875rem',
-              padding: '0.625rem 1.25rem',
-              borderRadius: '9999px',
-              border: '1px solid rgba(255,255,255,0.2)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <RefreshCw size={16} /> Refresh Data
-          </button>
         </div>
       </div>
 
