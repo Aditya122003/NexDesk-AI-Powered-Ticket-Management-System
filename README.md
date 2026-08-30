@@ -45,7 +45,7 @@ The system provides dedicated workspaces for **Customers** (to raise & track tic
 
 ---
 
-### 3. Automated Support Workflow & Bank-Grade Security
+### 3. Automated Support Workflow & Role Based Access Control Security
 <kbd><img src="backend/uploads/Website-Asset/workflow-and-governance.png" alt="Automated Support Workflow & Enterprise Governance" width="100%"></kbd>
 
 #### Explanation & Key Features:
@@ -53,7 +53,7 @@ The system provides dedicated workspaces for **Customers** (to raise & track tic
   1. **Submit Support Request**: Customers raise tickets with optional file attachments (images, PDFs, documents up to 5MB).
   2. **Groq AI Classification**: Groq SDK inspects issue parameters and assigns initial status, category, and priority.
   3. **Resolution & Email Alerts**: Support team updates ticket state; customers receive automated Gmail SMTP email notifications.
-* **Bank-Grade Access Control (RBAC)**: Enforces strict data isolation between customer records, admin operations, and superadmin governance.
+* **Role Based Access Control (RBAC)**: Enforces strict data isolation between customer records, admin operations, and superadmin governance.
 * **Bcrypt & TLS Encryption**: All credentials and session tokens are salted, hashed, and transmitted via secure protocols.
 
 ---

@@ -9,6 +9,7 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
     title: '',
     description: '',
     category: 'General',
+    customerPriority: 'Medium',
     priority: 'Medium'
   });
   const [file, setFile] = useState(null);
@@ -24,6 +25,7 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
         title: '',
         description: '',
         category: 'General',
+        customerPriority: 'Medium',
         priority: 'Medium'
       });
       setFile(null);
@@ -70,7 +72,7 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
       if (res.data.success) {
         const { category, priority, reasoning, suggestedSummary } = res.data.data;
         setFormData(prev => ({ ...prev, category, priority }));
-        setAiResult({ reasoning, suggestedSummary });
+        setAiResult({ priority, category, reasoning, suggestedSummary });
         showToast('⚡ Groq AI successfully analyzed ticket category & priority!', 'success');
       }
     } catch (error) {
@@ -94,7 +96,8 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
       data.append('title', formData.title);
       data.append('description', formData.description);
       data.append('category', formData.category);
-      data.append('priority', formData.priority);
+      data.append('customerPriority', formData.customerPriority);
+      data.append('priority', formData.priority || formData.customerPriority);
       if (file) {
         data.append('attachment', file);
       }
@@ -179,10 +182,18 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
                 color: '#6b21a8'
               }}
             >
-              <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', color: '#7e22ce', marginBottom: '4px' }}>
+              <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', color: '#7e22ce', marginBottom: '6px' }}>
                 <Sparkles size={14} /> Groq LLM Classification Insights:
               </div>
-              <p style={{ margin: 0, lineHeight: 1.4 }}>{aiResult.reasoning}</p>
+              <p style={{ margin: '0 0 6px 0', lineHeight: 1.4 }}>{aiResult.reasoning}</p>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, background: '#ffffff', color: '#7e22ce', padding: '2px 8px', borderRadius: '6px', border: '1px solid #d8b4fe' }}>
+                  AI Category: {aiResult.category}
+                </span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, background: '#ffffff', color: '#7e22ce', padding: '2px 8px', borderRadius: '6px', border: '1px solid #d8b4fe' }}>
+                  AI Priority: {aiResult.priority}
+                </span>
+              </div>
             </div>
           )}
 
@@ -204,11 +215,11 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Priority</label>
+              <label className="form-label">Customer Priority (Selected)</label>
               <select
-                name="priority"
+                name="customerPriority"
                 className="form-control"
-                value={formData.priority}
+                value={formData.customerPriority}
                 onChange={handleInputChange}
               >
                 <option value="Low">Low</option>

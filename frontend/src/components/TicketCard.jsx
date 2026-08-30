@@ -79,8 +79,9 @@ const TicketCard = ({ ticket, onViewDetails }) => {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
-        <PriorityBadge priority={ticket.priority} />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1rem' }}>
+        <PriorityBadge priority={ticket.customerPriority || ticket.priority || 'Medium'} type="customer" />
+        <PriorityBadge priority={ticket.priority || 'Medium'} type="ai" />
         <CategoryBadge category={ticket.category} />
         {ticket.attachment && (
           <span className="badge" style={{ backgroundColor: '#f1f5f9', color: '#475569', border: '1px solid #e2e8f0' }}>

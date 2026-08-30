@@ -15,12 +15,13 @@ const createTicket = async (req, res, next) => {
       });
     }
 
-    const { title, description, category: inputCategory, priority: inputPriority, autoTriage } = req.body;
+    const { title, description, category: inputCategory, priority: inputPriority, customerPriority: inputCustomerPriority, autoTriage } = req.body;
 
     if (!title || !description) {
       return res.status(400).json({ success: false, message: 'Title and description are required' });
     }
 
+    const customerPriority = inputCustomerPriority || inputPriority || 'Medium';
     let category = inputCategory;
     let priority = inputPriority;
     let aiReasoning = '';
@@ -54,7 +55,8 @@ const createTicket = async (req, res, next) => {
       title,
       description,
       category: category || 'Uncategorized',
-      priority: priority || 'Medium',
+      customerPriority: customerPriority,
+      priority: priority || customerPriority || 'Medium',
       status: 'Open',
       customer: req.user._id,
       attachment,
@@ -110,9 +112,12 @@ const getTickets = async (req, res, next) => {
       query.status = status;
     }
 
-    // Filter by priority
+    // Filter by priority (match either AI priority or customer priority)
     if (priority && ['Low', 'Medium', 'High', 'Urgent'].includes(priority)) {
-      query.priority = priority;
+      query.$or = [
+        { priority: priority },
+        { customerPriority: priority }
+      ];
     }
 
     // Filter by category

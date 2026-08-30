@@ -753,15 +753,15 @@ const LandingPage = ({ initialMode = 'login' }) => {
             </h2>
 
             <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.6, marginBottom: '2rem' }}>
-              When customers submit inquiries, NexDesk instantly suggests accurate responses, analyzes order refund details, and streamlines complex workflows so your team resolves tickets in seconds.
+              When customers submit inquiries, NexDesk instantly suggests accurate responses, analyzes ticket issue details, and streamlines complex workflows so your team resolves tickets in seconds.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>
-                <CheckCircle2 size={20} style={{ color: '#10b981' }} /> Real-time refund & order status verification
+                <CheckCircle2 size={20} style={{ color: '#10b981' }} /> Real-time issue resolution & order status verification
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>
-                <CheckCircle2 size={20} style={{ color: '#10b981' }} /> Automatic priority escalation & SLA risk warnings
+                <CheckCircle2 size={20} style={{ color: '#10b981' }} /> Automatic priority escalation & response time warnings
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>
                 <CheckCircle2 size={20} style={{ color: '#10b981' }} /> Seamless team collaboration & superadmin governance
@@ -1028,7 +1028,7 @@ const LandingPage = ({ initialMode = 'login' }) => {
             <ShieldCheck size={14} style={{ color: '#047857' }} /> ENTERPRISE GOVERNANCE & SECURITY
           </div>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.75rem' }}>
-            Bank-Grade Access Control & Governance
+            Role Based Access Control
           </h2>
           <p style={{ fontSize: '1.05rem', color: '#64748b', maxWidth: '680px', margin: '0 auto' }}>
             NexDesk protects system data and user privileges through multi-tier RBAC, automated Superadmin approvals, and encrypted sessions.
@@ -1081,7 +1081,7 @@ const LandingPage = ({ initialMode = 'login' }) => {
               <Clock size={24} />
             </div>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.5rem' }}>
-              Audit History & SLA Alerts
+              Audit History & Response Time Alerts
             </h3>
             <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: 1.6 }}>
               Timestamped status history for every ticket provides complete audit trails. Automated Nodemailer notifications alert users on ticket updates.

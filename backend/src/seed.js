@@ -489,6 +489,7 @@ const seedData = async () => {
         title: t.title,
         description: t.description,
         category: t.category,
+        customerPriority: t.customerPriority || (t.priority === 'Urgent' ? 'High' : t.priority === 'High' ? 'Medium' : 'Low'),
         priority: t.priority,
         status: t.status,
         customer: customerObj._id,

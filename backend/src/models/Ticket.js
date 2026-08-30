@@ -57,6 +57,11 @@ const ticketSchema = new mongoose.Schema(
       enum: ['Technical', 'Billing', 'Account', 'Feature Request', 'General', 'Uncategorized'],
       default: 'Uncategorized'
     },
+    customerPriority: {
+      type: String,
+      enum: ['Low', 'Medium', 'High', 'Urgent'],
+      default: 'Medium'
+    },
     priority: {
       type: String,
       enum: ['Low', 'Medium', 'High', 'Urgent'],

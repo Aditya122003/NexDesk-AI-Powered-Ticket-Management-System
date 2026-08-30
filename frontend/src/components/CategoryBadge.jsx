@@ -18,7 +18,7 @@ const CategoryBadge = ({ category }) => {
   return (
     <span className="badge badge-category" style={extraStyle}>
       {icon}
-      {category || 'Uncategorized'}
+      Category: {category || 'Uncategorized'}
     </span>
   );
 };

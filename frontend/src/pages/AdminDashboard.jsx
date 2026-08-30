@@ -4,6 +4,8 @@ import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import TicketCard from '../components/TicketCard';
+import PriorityBadge from '../components/PriorityBadge';
+import CategoryBadge from '../components/CategoryBadge';
 import TicketDetailModal from '../components/TicketDetailModal';
 import CustomDateModal from '../components/CustomDateModal';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -201,13 +203,14 @@ const AdminDashboard = () => {
       showToast('No tickets available to export', 'info');
       return;
     }
-    const headers = ['Ticket ID', 'Title', 'Customer Name', 'Customer Email', 'Category', 'Priority', 'Status', 'AI Triaged', 'Created Date'];
+    const headers = ['Ticket ID', 'Title', 'Customer Name', 'Customer Email', 'Category', 'Customer Priority', 'AI Classified Priority', 'Status', 'AI Triaged', 'Created Date'];
     const rows = tickets.map(t => [
       `"${t.ticketId}"`,
       `"${(t.title || '').replace(/"/g, '""')}"`,
       `"${(t.customer?.name || '').replace(/"/g, '""')}"`,
       `"${(t.customer?.email || '').replace(/"/g, '""')}"`,
       `"${t.category || ''}"`,
+      `"${t.customerPriority || t.priority || ''}"`,
       `"${t.priority || ''}"`,
       `"${t.status || ''}"`,
       `"${t.aiTriaged ? 'Yes' : 'No'}"`,
@@ -722,24 +725,13 @@ const AdminDashboard = () => {
                               <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{t.customer?.email}</div>
                             </td>
                             <td style={{ padding: '1rem 1.25rem' }}>
-                              <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', backgroundColor: '#f1f5f9', color: '#475569' }}>
-                                {t.category}
-                              </span>
+                              <CategoryBadge category={t.category} />
                             </td>
                             <td style={{ padding: '1rem 1.25rem' }}>
-                              <span
-                                style={{
-                                  fontSize: '0.75rem',
-                                  fontWeight: 800,
-                                  padding: '3px 10px',
-                                  borderRadius: '12px',
-                                  background: t.priority === 'Urgent' ? '#fef2f2' : t.priority === 'High' ? '#fff7ed' : t.priority === 'Medium' ? '#fefce8' : '#f0fdf4',
-                                  color: t.priority === 'Urgent' ? '#991b1b' : t.priority === 'High' ? '#c2410c' : t.priority === 'Medium' ? '#854d0e' : '#166534',
-                                  border: t.priority === 'Urgent' ? '1px solid #fca5a5' : t.priority === 'High' ? '1px solid #ffedd5' : t.priority === 'Medium' ? '1px solid #fef08a' : '1px solid #bbf7d0'
-                                }}
-                              >
-                                {t.priority}
-                              </span>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
+                                <PriorityBadge priority={t.customerPriority || t.priority || 'Medium'} type="customer" />
+                                <PriorityBadge priority={t.priority || 'Medium'} type="ai" />
+                              </div>
                             </td>
                             <td style={{ padding: '1rem 1.25rem' }}>
                               <span

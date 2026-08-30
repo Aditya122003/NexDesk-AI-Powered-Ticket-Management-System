@@ -69,7 +69,8 @@ const ClassificationLogsModal = ({ isOpen, onClose, logs = [] }) => {
       'Issue Title',
       'Issue Description',
       'AI Category',
-      'AI Priority',
+      'Customer Priority',
+      'AI Classified Priority',
       'Status',
       'Created Date'
     ];
@@ -81,6 +82,7 @@ const ClassificationLogsModal = ({ isOpen, onClose, logs = [] }) => {
       `"${(t.title || '').replace(/"/g, '""')}"`,
       `"${(t.description || '').replace(/"/g, '""')}"`,
       `"${t.category || 'Uncategorized'}"`,
+      `"${t.customerPriority || t.priority || 'Medium'}"`,
       `"${t.priority || 'Medium'}"`,
       `"${t.status || 'Open'}"`,
       `"${new Date(t.createdAt).toLocaleString()}"`
@@ -371,8 +373,12 @@ const ClassificationLogsModal = ({ isOpen, onClose, logs = [] }) => {
                           Category: {ticket.category}
                         </span>
 
+                        <span style={{ fontSize: '0.8rem', fontWeight: 800, backgroundColor: '#f0fdf4', color: '#15803d', padding: '3px 10px', borderRadius: '8px', border: '1.5px solid #bbf7d0' }}>
+                          Customer Priority: {ticket.customerPriority || ticket.priority || 'Medium'}
+                        </span>
+
                         <span style={{ fontSize: '0.8rem', fontWeight: 800, backgroundColor: pStyle.bg, color: pStyle.text, padding: '3px 10px', borderRadius: '8px', border: `1.5px solid ${pStyle.border}` }}>
-                          Priority: {ticket.priority}
+                          AI Priority: {ticket.priority}
                         </span>
                       </div>
 
