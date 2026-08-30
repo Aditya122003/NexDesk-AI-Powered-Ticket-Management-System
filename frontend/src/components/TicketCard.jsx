@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StatusBadge from './StatusBadge';
 import PriorityBadge from './PriorityBadge';
 import CategoryBadge from './CategoryBadge';
+import ConfirmModal from './ConfirmModal';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
@@ -10,26 +11,28 @@ import { Paperclip, Sparkles, Eye, Calendar, Pencil, CheckCircle2, Trash2 } from
 const TicketCard = ({ ticket, onViewDetails, onTicketDeleted }) => {
   const { isAdmin } = useAuth();
   const { showToast } = useNotification();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const raisedDate = ticket.createdAt
     ? new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
 
-  const handleDeleteCard = async (e) => {
-    e.stopPropagation();
-    if (!window.confirm(`⚠️ Are you sure you want to PERMANENTLY DELETE ticket '${ticket.ticketId}'?\nThis action cannot be undone.`)) {
-      return;
-    }
-
+  const confirmDelete = async () => {
+    setIsDeleting(true);
     try {
       const res = await API.delete(`/tickets/${ticket._id}`);
       if (res.data.success) {
         showToast(`Ticket ${ticket.ticketId} deleted successfully`, 'info');
+        setIsDeleteModalOpen(false);
         if (onTicketDeleted) {
           onTicketDeleted(ticket._id);
         }
       }
     } catch (error) {
       showToast(error.response?.data?.message || 'Failed to delete ticket', 'error');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -168,7 +171,10 @@ const TicketCard = ({ ticket, onViewDetails, onTicketDeleted }) => {
               <Pencil size={14} /> Edit Ticket
             </button>
             <button
-              onClick={handleDeleteCard}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleteModalOpen(true);
+              }}
               style={{
                 backgroundColor: '#fef2f2',
                 color: '#dc2626',
@@ -189,6 +195,17 @@ const TicketCard = ({ ticket, onViewDetails, onTicketDeleted }) => {
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Support Ticket"
+        message={`Are you sure you want to PERMANENTLY DELETE ticket '${ticket.ticketId}'?`}
+        subMessage="This action cannot be undone."
+        confirmText="Yes, Delete Ticket"
+        loading={isDeleting}
+      />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import CategoryBadge from './CategoryBadge';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
+import ConfirmModal from './ConfirmModal';
 import { X, Paperclip, Download, Clock, Sparkles, Send, CheckCircle2, History, Pencil, Trash2 } from 'lucide-react';
 
 const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
@@ -14,6 +15,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
   const [newCategory, setNewCategory] = useState(ticket?.category || 'Uncategorized');
   const [statusNote, setStatusNote] = useState('');
   const [updating, setUpdating] = useState(false);
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
   // Customer Edit State
   const [editTitle, setEditTitle] = useState(ticket?.title || '');
@@ -28,6 +30,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
       setEditDescription(ticket.description || '');
       setEditCustomerPriority(ticket.customerPriority || ticket.priority || 'Medium');
       setStatusNote('');
+      setIsConfirmDeleteOpen(false);
     }
   }, [ticket]);
 
@@ -101,16 +104,13 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
     }
   };
 
-  const handleDeleteTicket = async () => {
-    if (!window.confirm(`⚠️ Are you sure you want to PERMANENTLY DELETE ticket '${ticket.ticketId}'?\nThis action cannot be undone.`)) {
-      return;
-    }
-
+  const executeTicketDelete = async () => {
     setUpdating(true);
     try {
       const res = await API.delete(`/tickets/${ticket._id}`);
       if (res.data.success) {
         showToast('Support ticket deleted successfully', 'info');
+        setIsConfirmDeleteOpen(false);
         onClose();
         if (onTicketUpdated) {
           onTicketUpdated(null);
@@ -438,7 +438,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <button
                       type="button"
-                      onClick={handleDeleteTicket}
+                      onClick={() => setIsConfirmDeleteOpen(true)}
                       disabled={updating}
                       style={{
                         backgroundColor: '#fef2f2',
@@ -576,6 +576,17 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmDeleteOpen}
+        onClose={() => setIsConfirmDeleteOpen(false)}
+        onConfirm={executeTicketDelete}
+        title="Delete Support Ticket"
+        message={`Are you sure you want to PERMANENTLY DELETE ticket '${ticket.ticketId}'?`}
+        subMessage="This action cannot be undone."
+        confirmText="Yes, Delete Ticket"
+        loading={updating}
+      />
     </div>
   );
 };

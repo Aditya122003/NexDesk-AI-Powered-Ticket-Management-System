@@ -9,6 +9,7 @@ import CategoryBadge from '../components/CategoryBadge';
 import TicketDetailModal from '../components/TicketDetailModal';
 import CustomDateModal from '../components/CustomDateModal';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ConfirmModal from '../components/ConfirmModal';
 import {
   Search, Filter, RefreshCw, BarChart3, Shield, Ticket as TicketIcon,
   CheckCircle, XCircle, UserCheck, Crown, Users, Trash2, Mail,
@@ -23,6 +24,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('tickets'); // 'tickets' | 'users'
   const [ticketViewMode, setTicketViewMode] = useState('grid'); // 'grid' | 'list'
   const [tickets, setTickets] = useState([]);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [isDeletingUser, setIsDeletingUser] = useState(false);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -153,21 +156,26 @@ const AdminDashboard = () => {
   };
 
   // Delete Any User (Admin or Customer)
-  const handleDeleteUser = async (userId, userName, userRole) => {
-    if (!window.confirm(`Are you sure you want to delete ${userRole.toUpperCase()} account '${userName}'? This action cannot be undone.`)) {
-      return;
-    }
+  const handleDeleteUser = (userId, userName, userRole) => {
+    setUserToDelete({ id: userId, name: userName, role: userRole });
+  };
 
+  const confirmExecuteDeleteUser = async () => {
+    if (!userToDelete) return;
+    setIsDeletingUser(true);
     try {
-      const res = await API.delete(`/admin/users/${userId}`);
+      const res = await API.delete(`/admin/users/${userToDelete.id}`);
       if (res.data.success) {
-        showToast(`Deleted ${userRole} '${userName}' successfully!`, 'success');
+        showToast(`Deleted ${userToDelete.role} '${userToDelete.name}' successfully!`, 'success');
+        setUserToDelete(null);
         fetchAllUsers();
         fetchTickets();
         fetchPendingAdmins();
       }
     } catch (error) {
       showToast(error.response?.data?.message || 'Failed to delete user', 'error');
+    } finally {
+      setIsDeletingUser(false);
     }
   };
 
@@ -934,6 +942,18 @@ const AdminDashboard = () => {
           setCustomEndDate(end);
           setDateRange('custom');
         }}
+      />
+
+      {/* Delete User Confirm Modal */}
+      <ConfirmModal
+        isOpen={!!userToDelete}
+        onClose={() => setUserToDelete(null)}
+        onConfirm={confirmExecuteDeleteUser}
+        title="Delete User Account"
+        message={userToDelete ? `Are you sure you want to PERMANENTLY DELETE ${userToDelete.role.toUpperCase()} account '${userToDelete.name}'?` : ''}
+        subMessage="Account and related records will be permanently removed."
+        confirmText="Yes, Delete User"
+        loading={isDeletingUser}
       />
     </div>
   );

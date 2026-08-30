@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import TicketCard from '../components/TicketCard';
 import TicketDetailModal from '../components/TicketDetailModal';
+import ConfirmModal from '../components/ConfirmModal';
 import {
   Crown, Shield, Users, UserCheck, Ticket, BarChart3, Search, RefreshCw,
   Trash2, CheckCircle, XCircle, Mail, AlertTriangle, Filter, Plus, Send, X
@@ -20,6 +21,8 @@ const SuperadminDashboard = () => {
   const [pendingAdmins, setPendingAdmins] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userToDeleteSilent, setUserToDeleteSilent] = useState(null);
+  const [isDeletingSilent, setIsDeletingSilent] = useState(false);
 
   // Searches & Filters
   const [userSearch, setUserSearch] = useState('');
@@ -136,19 +139,24 @@ const SuperadminDashboard = () => {
   };
 
   // ACTION 3: Silent Delete User (No Email / Message Sent)
-  const handleDeleteUserSilent = async (userId, userName, userRole) => {
-    if (!window.confirm(`⚠️ SILENT DELETE ACTION:\nAre you sure you want to PERMANENTLY DELETE ${userRole.toUpperCase()} account '${userName}'?\nAccount & records will be removed immediately. NO EMAIL OR NOTIFICATION WILL BE SENT.`)) {
-      return;
-    }
+  const handleDeleteUserSilent = (userId, userName, userRole) => {
+    setUserToDeleteSilent({ id: userId, name: userName, role: userRole });
+  };
 
+  const confirmExecuteDeleteUserSilent = async () => {
+    if (!userToDeleteSilent) return;
+    setIsDeletingSilent(true);
     try {
-      const res = await API.delete(`/admin/users/${userId}`);
+      const res = await API.delete(`/admin/users/${userToDeleteSilent.id}`);
       if (res.data.success) {
-        showToast(`Account '${userName}' deleted permanently without sending notifications.`, 'success');
+        showToast(`Account '${userToDeleteSilent.name}' deleted permanently without sending notifications.`, 'success');
+        setUserToDeleteSilent(null);
         refreshAll();
       }
     } catch (error) {
       showToast(error.response?.data?.message || 'Failed to delete user', 'error');
+    } finally {
+      setIsDeletingSilent(false);
     }
   };
 
@@ -829,6 +837,18 @@ const SuperadminDashboard = () => {
           setSelectedTicket(updated);
           fetchTickets();
         }}
+      />
+
+      {/* Silent Delete User Confirm Modal */}
+      <ConfirmModal
+        isOpen={!!userToDeleteSilent}
+        onClose={() => setUserToDeleteSilent(null)}
+        onConfirm={confirmExecuteDeleteUserSilent}
+        title="Silent Delete Account"
+        message={userToDeleteSilent ? `Are you sure you want to PERMANENTLY DELETE ${userToDeleteSilent.role.toUpperCase()} account '${userToDeleteSilent.name}'?` : ''}
+        subMessage="Account & records will be removed immediately. NO EMAIL OR NOTIFICATION WILL BE SENT."
+        confirmText="Yes, Silent Delete"
+        loading={isDeletingSilent}
       />
     </div>
   );
