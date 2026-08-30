@@ -3,13 +3,35 @@ import StatusBadge from './StatusBadge';
 import PriorityBadge from './PriorityBadge';
 import CategoryBadge from './CategoryBadge';
 import { useAuth } from '../context/AuthContext';
-import { Paperclip, Sparkles, Eye, Calendar, Pencil, CheckCircle2 } from 'lucide-react';
+import { useNotification } from '../context/NotificationContext';
+import API from '../services/api';
+import { Paperclip, Sparkles, Eye, Calendar, Pencil, CheckCircle2, Trash2 } from 'lucide-react';
 
-const TicketCard = ({ ticket, onViewDetails }) => {
+const TicketCard = ({ ticket, onViewDetails, onTicketDeleted }) => {
   const { isAdmin } = useAuth();
+  const { showToast } = useNotification();
   const raisedDate = ticket.createdAt
     ? new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
+
+  const handleDeleteCard = async (e) => {
+    e.stopPropagation();
+    if (!window.confirm(`⚠️ Are you sure you want to PERMANENTLY DELETE ticket '${ticket.ticketId}'?\nThis action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await API.delete(`/tickets/${ticket._id}`);
+      if (res.data.success) {
+        showToast(`Ticket ${ticket.ticketId} deleted successfully`, 'info');
+        if (onTicketDeleted) {
+          onTicketDeleted(ticket._id);
+        }
+      }
+    } catch (error) {
+      showToast(error.response?.data?.message || 'Failed to delete ticket', 'error');
+    }
+  };
 
   return (
     <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -137,13 +159,34 @@ const TicketCard = ({ ticket, onViewDetails }) => {
             <CheckCircle2 size={14} style={{ color: '#059669' }} /> Ticket Resolved
           </button>
         ) : (
-          <button
-            onClick={() => onViewDetails(ticket)}
-            className="btn btn-primary btn-sm"
-            style={{ gap: '5px', fontWeight: 800 }}
-          >
-            <Pencil size={14} /> Edit Ticket
-          </button>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button
+              onClick={() => onViewDetails(ticket)}
+              className="btn btn-primary btn-sm"
+              style={{ gap: '5px', fontWeight: 800 }}
+            >
+              <Pencil size={14} /> Edit Ticket
+            </button>
+            <button
+              onClick={handleDeleteCard}
+              style={{
+                backgroundColor: '#fef2f2',
+                color: '#dc2626',
+                border: '1px solid #fecaca',
+                borderRadius: '8px',
+                padding: '4px 10px',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+              title="Delete Ticket before resolution"
+            >
+              <Trash2 size={13} /> Delete
+            </button>
+          </div>
         )}
       </div>
     </div>

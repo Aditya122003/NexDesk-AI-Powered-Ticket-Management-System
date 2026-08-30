@@ -362,6 +362,7 @@ const CustomerDashboard = () => {
               key={ticket._id}
               ticket={ticket}
               onViewDetails={(t) => setSelectedTicket(t)}
+              onTicketDeleted={() => fetchTickets()}
             />
           ))}
         </div>

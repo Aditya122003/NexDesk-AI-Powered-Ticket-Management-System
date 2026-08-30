@@ -5,7 +5,7 @@ import CategoryBadge from './CategoryBadge';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
-import { X, Paperclip, Download, Clock, Sparkles, Send, CheckCircle2, History, Pencil } from 'lucide-react';
+import { X, Paperclip, Download, Clock, Sparkles, Send, CheckCircle2, History, Pencil, Trash2 } from 'lucide-react';
 
 const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
   const { isAdmin } = useAuth();
@@ -27,6 +27,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
       setEditTitle(ticket.title || '');
       setEditDescription(ticket.description || '');
       setEditCustomerPriority(ticket.customerPriority || ticket.priority || 'Medium');
+      setStatusNote('');
     }
   }, [ticket]);
 
@@ -45,22 +46,27 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
 
   const handleStatusUpdate = async (e) => {
     e.preventDefault();
+    if (!statusNote.trim()) {
+      showToast('Please provide an update note', 'error');
+      return;
+    }
+
     setUpdating(true);
     try {
       const res = await API.put(`/tickets/${ticket._id}/status`, {
         status: newStatus,
         category: newCategory,
-        note: statusNote
+        note: statusNote.trim()
       });
 
       if (res.data.success) {
-        showToast(`Ticket details updated successfully`, 'success');
-        onTicketUpdated(res.data.data);
+        showToast(`Ticket status updated to "${newStatus}"`, 'success');
         setStatusNote('');
+        onTicketUpdated(res.data.data);
         onClose();
       }
     } catch (error) {
-      console.error('[TicketDetail] Status update error:', error);
+      console.error('[TicketDetail] Error updating status:', error);
       showToast(error.response?.data?.message || 'Failed to update ticket status', 'error');
     } finally {
       setUpdating(false);
@@ -69,11 +75,16 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
 
   const handleCustomerEdit = async (e) => {
     e.preventDefault();
+    if (!editTitle.trim() || !editDescription.trim()) {
+      showToast('Title and description are required', 'error');
+      return;
+    }
+
     setUpdating(true);
     try {
       const res = await API.put(`/tickets/${ticket._id}`, {
-        title: editTitle,
-        description: editDescription,
+        title: editTitle.trim(),
+        description: editDescription.trim(),
         customerPriority: editCustomerPriority
       });
 
@@ -85,6 +96,29 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
     } catch (error) {
       console.error('[TicketDetail] Customer edit error:', error);
       showToast(error.response?.data?.message || 'Failed to edit ticket', 'error');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleDeleteTicket = async () => {
+    if (!window.confirm(`⚠️ Are you sure you want to PERMANENTLY DELETE ticket '${ticket.ticketId}'?\nThis action cannot be undone.`)) {
+      return;
+    }
+
+    setUpdating(true);
+    try {
+      const res = await API.delete(`/tickets/${ticket._id}`);
+      if (res.data.success) {
+        showToast('Support ticket deleted successfully', 'info');
+        onClose();
+        if (onTicketUpdated) {
+          onTicketUpdated(null);
+        }
+      }
+    } catch (error) {
+      console.error('[TicketDetail] Delete ticket error:', error);
+      showToast(error.response?.data?.message || 'Failed to delete ticket', 'error');
     } finally {
       setUpdating(false);
     }
@@ -401,7 +435,28 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
                     />
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={handleDeleteTicket}
+                      disabled={updating}
+                      style={{
+                        backgroundColor: '#fef2f2',
+                        color: '#dc2626',
+                        border: '1px solid #fecaca',
+                        borderRadius: '10px',
+                        padding: '8px 16px',
+                        fontSize: '0.85rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <Trash2 size={15} /> Delete Ticket
+                    </button>
+
                     <button
                       type="submit"
                       disabled={updating || !editTitle.trim() || !editDescription.trim()}

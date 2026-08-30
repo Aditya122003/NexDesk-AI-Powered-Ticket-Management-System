@@ -293,9 +293,23 @@ const deleteTicket = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Ticket not found' });
     }
 
-    // Only admin or ticket owner can delete
-    if (req.user.role !== 'admin' && ticket.customer.toString() !== req.user._id.toString()) {
+    // Admins and Superadmins can delete any ticket
+    if (req.user.role === 'admin' || req.user.role === 'superadmin') {
+      await Ticket.findByIdAndDelete(req.params.id);
+      return res.json({ success: true, message: 'Ticket deleted successfully' });
+    }
+
+    // Ticket creator (Customer) authorization check
+    if (ticket.customer.toString() !== req.user._id.toString()) {
       return res.status(403).json({ success: false, message: 'Not authorized to delete this ticket' });
+    }
+
+    // Customer can ONLY delete if ticket is NOT resolved
+    if (ticket.status === 'Resolved') {
+      return res.status(400).json({
+        success: false,
+        message: 'Resolved tickets are finalized and locked. They cannot be deleted.'
+      });
     }
 
     await Ticket.findByIdAndDelete(req.params.id);
