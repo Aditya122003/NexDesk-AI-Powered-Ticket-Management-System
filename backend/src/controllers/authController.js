@@ -84,7 +84,7 @@ const register = async (req, res, next) => {
       return res.status(201).json({
         success: true,
         pendingApproval: true,
-        message: `Admin registration submitted! Superadmin (${SUPERADMIN_EMAIL}) must approve your account before you can log in as Admin.`
+        message: 'Admin registration submitted! Superadmin must approve your account before you can log in as Admin.'
       });
     }
 
@@ -135,7 +135,7 @@ const login = async (req, res, next) => {
       return res.status(403).json({
         success: false,
         pendingApproval: true,
-        message: `Admin account approval pending. Superadmin (${SUPERADMIN_EMAIL}) must approve your account before you can log in.`
+        message: 'Admin account approval pending. Superadmin must approve your account before you can log in.'
       });
     }
 
@@ -235,7 +235,7 @@ const googleLogin = async (req, res, next) => {
       return res.status(403).json({
         success: false,
         pendingApproval: true,
-        message: `Admin account approval pending. Superadmin (${SUPERADMIN_EMAIL}) must approve your account.`
+        message: 'Admin account approval pending. Superadmin must approve your account.'
       });
     }
 

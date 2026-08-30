@@ -205,7 +205,7 @@ const RegisterPage = () => {
             >
               <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <strong>Superadmin Approval Required:</strong> Admin accounts require approval from Superadmin (<code>adityatiwari5175@gmail.com</code>) before login access is granted.
+                <strong>Superadmin Approval Required:</strong> Admin accounts require approval from Superadmin before login access is granted.
               </div>
             </div>
           )}

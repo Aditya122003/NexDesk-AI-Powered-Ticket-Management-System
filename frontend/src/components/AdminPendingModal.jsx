@@ -144,7 +144,7 @@ const AdminPendingModal = ({ isOpen, onClose, userName, userEmail, message }) =>
                 Superadmin Approval Required
               </div>
               <div>
-                {message || 'Admin registration submitted! Superadmin (adityatiwari5175@gmail.com) must approve your account before you can log in as Admin.'}
+                {message || 'Admin registration submitted! Superadmin must approve your account before you can log in as Admin.'}
               </div>
             </div>
           </div>
