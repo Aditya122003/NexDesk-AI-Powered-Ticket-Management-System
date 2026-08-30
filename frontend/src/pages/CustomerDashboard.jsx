@@ -47,6 +47,8 @@ const CustomerDashboard = () => {
 
       const params = {
         limit: 500, // Load all matching tickets in date range
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
         search,
         status: statusFilter,
         priority: priorityFilter,
@@ -55,7 +57,10 @@ const CustomerDashboard = () => {
       };
       const res = await API.get('/tickets', { params });
       if (res.data.success) {
-        setTickets(res.data.data);
+        const sortedTickets = (res.data.data || []).sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
+        setTickets(sortedTickets);
       }
     } catch (error) {
       console.error('[CustomerDashboard] Error fetching tickets:', error);

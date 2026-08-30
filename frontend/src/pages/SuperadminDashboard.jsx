@@ -66,13 +66,18 @@ const SuperadminDashboard = () => {
     try {
       const params = {
         page: 1,
-        limit: 20,
+        limit: 500,
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
         search: ticketSearch,
         status: statusFilter
       };
       const res = await API.get('/tickets', { params });
       if (res.data.success) {
-        setTickets(res.data.data);
+        const sortedTickets = (res.data.data || []).sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
+        setTickets(sortedTickets);
       }
     } catch (error) {
       console.error('[Superadmin] Error fetching tickets:', error);

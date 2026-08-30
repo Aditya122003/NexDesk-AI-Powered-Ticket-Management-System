@@ -168,6 +168,9 @@ const getTickets = async (req, res, next) => {
 
     const sortOptions = {};
     sortOptions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    if (sortBy !== '_id') {
+      sortOptions._id = sortOrder === 'asc' ? 1 : -1;
+    }
 
     const total = await Ticket.countDocuments(query);
     const tickets = await Ticket.find(query)
