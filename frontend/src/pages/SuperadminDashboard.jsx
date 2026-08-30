@@ -809,7 +809,7 @@ const SuperadminDashboard = () => {
                     gap: '6px'
                   }}
                 >
-                  <Send size={15} /> {disapproving ? 'Sending Email...' : 'Disapprove & Send Email Reason'}
+                  <Send size={15} /> {disapproving ? 'Disapproving...' : 'Disapprove'}
                 </button>
               </div>
             </form>
