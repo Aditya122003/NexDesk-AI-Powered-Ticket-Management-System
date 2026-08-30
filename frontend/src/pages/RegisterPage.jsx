@@ -21,8 +21,20 @@ const RegisterPage = () => {
       showToast('Please fill out all fields', 'error');
       return;
     }
-    if (password.length < 6) {
-      showToast('Password must be at least 6 characters', 'error');
+    if (password.length < 8) {
+      showToast('Password must be at least 8 characters long', 'error');
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      showToast('Password must contain at least 1 uppercase letter (A-Z)', 'error');
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      showToast('Password must contain at least 1 lowercase letter (a-z)', 'error');
+      return;
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      showToast('Password must contain at least 1 special character (!@#$%^&*)', 'error');
       return;
     }
 
@@ -130,7 +142,7 @@ const RegisterPage = () => {
               <input
                 type="password"
                 className="form-control"
-                placeholder="At least 6 characters"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ paddingLeft: '2.5rem' }}

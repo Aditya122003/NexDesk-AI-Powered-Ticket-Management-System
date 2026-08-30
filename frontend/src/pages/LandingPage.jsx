@@ -578,12 +578,12 @@ const LandingPage = ({ initialMode = 'login' }) => {
                         <input
                           type="password"
                           className="form-control"
-                          placeholder="At least 6 characters"
+                          placeholder="At least 8 characters"
                           value={regPassword}
                           onChange={(e) => setRegPassword(e.target.value)}
                           style={{ paddingLeft: '2.5rem' }}
                           required
-                          minLength={6}
+                          minLength={8}
                         />
                         <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                       </div>
