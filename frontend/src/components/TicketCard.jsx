@@ -2,9 +2,11 @@ import React from 'react';
 import StatusBadge from './StatusBadge';
 import PriorityBadge from './PriorityBadge';
 import CategoryBadge from './CategoryBadge';
-import { Paperclip, Sparkles, Eye, Calendar } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { Paperclip, Sparkles, Eye, Calendar, Pencil, CheckCircle2 } from 'lucide-react';
 
 const TicketCard = ({ ticket, onViewDetails }) => {
+  const { isAdmin } = useAuth();
   const raisedDate = ticket.createdAt
     ? new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
@@ -111,13 +113,38 @@ const TicketCard = ({ ticket, onViewDetails }) => {
           </span>
         </div>
 
-        <button
-          onClick={() => onViewDetails(ticket)}
-          className="btn btn-secondary btn-sm"
-          style={{ gap: '4px' }}
-        >
-          <Eye size={14} /> Update Status
-        </button>
+        {isAdmin ? (
+          <button
+            onClick={() => onViewDetails(ticket)}
+            className="btn btn-secondary btn-sm"
+            style={{ gap: '4px', fontWeight: 800 }}
+          >
+            <Eye size={14} /> Update Status
+          </button>
+        ) : ticket.status === 'Resolved' ? (
+          <button
+            onClick={() => onViewDetails(ticket)}
+            className="btn btn-secondary btn-sm"
+            style={{
+              gap: '5px',
+              backgroundColor: '#ecfdf5',
+              color: '#047857',
+              borderColor: '#a7f3d0',
+              fontWeight: 800,
+              cursor: 'pointer'
+            }}
+          >
+            <CheckCircle2 size={14} style={{ color: '#059669' }} /> Ticket Resolved
+          </button>
+        ) : (
+          <button
+            onClick={() => onViewDetails(ticket)}
+            className="btn btn-primary btn-sm"
+            style={{ gap: '5px', fontWeight: 800 }}
+          >
+            <Pencil size={14} /> Edit Ticket
+          </button>
+        )}
       </div>
     </div>
   );

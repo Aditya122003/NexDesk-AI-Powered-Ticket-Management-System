@@ -5,7 +5,7 @@ import CategoryBadge from './CategoryBadge';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import API from '../services/api';
-import { X, Paperclip, Download, Clock, Sparkles, Send, CheckCircle2, History } from 'lucide-react';
+import { X, Paperclip, Download, Clock, Sparkles, Send, CheckCircle2, History, Pencil } from 'lucide-react';
 
 const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
   const { isAdmin } = useAuth();
@@ -15,10 +15,18 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
   const [statusNote, setStatusNote] = useState('');
   const [updating, setUpdating] = useState(false);
 
+  // Customer Edit State
+  const [editTitle, setEditTitle] = useState(ticket?.title || '');
+  const [editDescription, setEditDescription] = useState(ticket?.description || '');
+  const [editCustomerPriority, setEditCustomerPriority] = useState(ticket?.customerPriority || 'Medium');
+
   useEffect(() => {
     if (ticket) {
       setNewStatus(ticket.status || 'Open');
       setNewCategory(ticket.category || 'Uncategorized');
+      setEditTitle(ticket.title || '');
+      setEditDescription(ticket.description || '');
+      setEditCustomerPriority(ticket.customerPriority || ticket.priority || 'Medium');
     }
   }, [ticket]);
 
@@ -54,6 +62,29 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
     } catch (error) {
       console.error('[TicketDetail] Status update error:', error);
       showToast(error.response?.data?.message || 'Failed to update ticket status', 'error');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleCustomerEdit = async (e) => {
+    e.preventDefault();
+    setUpdating(true);
+    try {
+      const res = await API.put(`/tickets/${ticket._id}`, {
+        title: editTitle,
+        description: editDescription,
+        customerPriority: editCustomerPriority
+      });
+
+      if (res.data.success) {
+        showToast('Ticket updated successfully', 'success');
+        onTicketUpdated(res.data.data);
+        onClose();
+      }
+    } catch (error) {
+      console.error('[TicketDetail] Customer edit error:', error);
+      showToast(error.response?.data?.message || 'Failed to edit ticket', 'error');
     } finally {
       setUpdating(false);
     }
@@ -105,7 +136,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
         {/* 2-Column Responsive Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.5rem', alignItems: 'start' }}>
           
-          {/* Left Column: AI Banner, Description, Attachment & Admin Action Form */}
+          {/* Left Column: AI Banner, Description, Attachment & Admin Action / Customer Edit Form */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* AI Insight banner if applicable */}
             {ticket.aiTriaged && ticket.aiReasoning && (
@@ -185,7 +216,7 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
             )}
 
             {/* Admin Workflow Action Panel */}
-            {isAdmin && (
+            {isAdmin ? (
               <div
                 style={{
                   backgroundColor: '#ecfdf5',
@@ -285,10 +316,116 @@ const TicketDetailModal = ({ ticket, isOpen, onClose, onTicketUpdated }) => {
                   </div>
                 </form>
               </div>
+            ) : ticket.status === 'Resolved' ? (
+              /* Customer View: Ticket Resolved Locked Banner */
+              <div
+                style={{
+                  backgroundColor: '#ecfdf5',
+                  border: '1.5px solid #a7f3d0',
+                  borderRadius: '16px',
+                  padding: '1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}
+              >
+                <CheckCircle2 size={24} style={{ color: '#059669', flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#047857', marginBottom: '2px' }}>
+                    Ticket Resolved
+                  </div>
+                  <div style={{ fontSize: '0.825rem', color: '#065f46', fontWeight: 600, lineHeight: 1.4 }}>
+                    This support ticket has been resolved by Support Admin and is locked for further modifications.
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Customer View: Customer Edit Ticket Form */
+              <div
+                style={{
+                  backgroundColor: '#f0f9ff',
+                  border: '1.5px solid #bae6fd',
+                  borderRadius: '16px',
+                  padding: '1.25rem',
+                  boxShadow: '0 4px 6px -1px rgba(3, 105, 161, 0.05)'
+                }}
+              >
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 900, color: '#0369a1', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Pencil size={18} style={{ color: '#0284c7' }} /> Edit Your Support Ticket
+                </h4>
+                <form onSubmit={handleCustomerEdit} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px', gap: '1rem' }}>
+                    <div>
+                      <label style={{ fontSize: '0.725rem', fontWeight: 800, color: '#0369a1', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        TICKET TITLE
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        required
+                        style={{ width: '100%', borderRadius: '10px', fontWeight: 600, fontSize: '0.875rem' }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ fontSize: '0.725rem', fontWeight: 800, color: '#0369a1', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        YOUR PRIORITY
+                      </label>
+                      <select
+                        className="form-control"
+                        value={editCustomerPriority}
+                        onChange={(e) => setEditCustomerPriority(e.target.value)}
+                        style={{ fontWeight: 700, borderRadius: '10px', fontSize: '0.875rem' }}
+                      >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ fontSize: '0.725rem', fontWeight: 800, color: '#0369a1', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      ISSUE DESCRIPTION
+                    </label>
+                    <textarea
+                      className="form-control"
+                      rows={3}
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      required
+                      style={{ width: '100%', borderRadius: '10px', fontWeight: 500, fontSize: '0.85rem', lineHeight: 1.5, backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <button
+                      type="submit"
+                      disabled={updating || !editTitle.trim() || !editDescription.trim()}
+                      className="btn btn-primary"
+                      style={{
+                        padding: '8px 20px',
+                        fontSize: '0.85rem',
+                        fontWeight: 900,
+                        gap: '6px',
+                        borderRadius: '10px',
+                        backgroundColor: '#0284c7',
+                        borderColor: '#0284c7',
+                        boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)'
+                      }}
+                    >
+                      <Send size={15} /> {updating ? 'Saving Changes...' : 'Save Changes'}
+                    </button>
+                  </div>
+                </form>
+              </div>
             )}
           </div>
 
-          {/* Right Column: Customer Info & Status History Timeline (Immediately Visible without Scroll) */}
+          {/* Right Column: Customer Info & Status History Timeline */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* Submitted By & Category Panel */}
             <div style={{ backgroundColor: '#f8fafc', padding: '1rem', borderRadius: '14px', border: '1.5px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>

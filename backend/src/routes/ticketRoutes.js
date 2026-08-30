@@ -5,6 +5,7 @@ const {
   getTickets,
   getTicketById,
   updateTicketStatus,
+  updateTicketDetails,
   deleteTicket
 } = require('../controllers/ticketController');
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -20,6 +21,7 @@ router
 router
   .route('/:id')
   .get(getTicketById)
+  .put(updateTicketDetails)
   .delete(deleteTicket);
 
 router

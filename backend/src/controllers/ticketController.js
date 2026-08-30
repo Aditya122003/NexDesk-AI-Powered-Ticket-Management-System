@@ -306,10 +306,54 @@ const deleteTicket = async (req, res, next) => {
   }
 };
 
+// @desc    Update ticket details by Customer owner
+// @route   PUT /api/tickets/:id
+// @access  Private (Customer / Ticket Owner)
+const updateTicketDetails = async (req, res, next) => {
+  try {
+    const { title, description, customerPriority } = req.body;
+
+    const ticket = await Ticket.findById(req.params.id);
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Ticket not found' });
+    }
+
+    if (ticket.customer.toString() !== req.user._id.toString() && req.user.role !== 'admin' && req.user.role !== 'superadmin') {
+      return res.status(403).json({ success: false, message: 'Not authorized to edit this ticket' });
+    }
+
+    if (ticket.status === 'Resolved') {
+      return res.status(400).json({ success: false, message: 'This ticket has been resolved and cannot be edited.' });
+    }
+
+    if (title) ticket.title = title;
+    if (description) ticket.description = description;
+    if (customerPriority && ['Urgent', 'High', 'Medium', 'Low'].includes(customerPriority)) {
+      ticket.customerPriority = customerPriority;
+    }
+
+    await ticket.save();
+
+    const updatedTicket = await Ticket.findById(ticket._id)
+      .populate('customer', 'name email avatar role')
+      .populate('assignedTo', 'name email role')
+      .populate('statusHistory.changedBy', 'name email role');
+
+    res.json({
+      success: true,
+      message: 'Ticket details updated successfully',
+      data: updatedTicket
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createTicket,
   getTickets,
   getTicketById,
   updateTicketStatus,
+  updateTicketDetails,
   deleteTicket
 };
