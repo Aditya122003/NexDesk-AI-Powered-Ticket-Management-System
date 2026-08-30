@@ -238,7 +238,17 @@ const SuperadminDashboard = () => {
 
       {/* KPI Overview Grid */}
       <div className="grid-stats" style={{ marginBottom: '2rem' }}>
-        <div className="stat-card" onClick={() => setActiveTab('pending')} style={{ cursor: 'pointer' }}>
+        <div
+          className="stat-card"
+          onClick={() => setActiveTab('pending')}
+          style={{
+            cursor: 'pointer',
+            border: activeTab === 'pending' ? '2.5px solid #b45309' : '1.5px solid #e2e8f0',
+            boxShadow: activeTab === 'pending' ? '0 8px 20px -4px rgba(180, 83, 9, 0.25)' : 'none',
+            transform: activeTab === 'pending' ? 'translateY(-3px)' : 'none',
+            transition: 'all 0.2s ease'
+          }}
+        >
           <div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700 }}>Pending Approvals</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#b45309' }}>{pendingAdmins.length}</div>
@@ -248,7 +258,17 @@ const SuperadminDashboard = () => {
           </div>
         </div>
 
-        <div className="stat-card" onClick={() => setActiveTab('admins')} style={{ cursor: 'pointer' }}>
+        <div
+          className="stat-card"
+          onClick={() => setActiveTab('admins')}
+          style={{
+            cursor: 'pointer',
+            border: activeTab === 'admins' ? '2.5px solid #032d1f' : '1.5px solid #e2e8f0',
+            boxShadow: activeTab === 'admins' ? '0 8px 20px -4px rgba(3, 45, 31, 0.25)' : 'none',
+            transform: activeTab === 'admins' ? 'translateY(-3px)' : 'none',
+            transition: 'all 0.2s ease'
+          }}
+        >
           <div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700 }}>Approved Admins</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#032d1f' }}>{approvedAdmins.length}</div>
@@ -258,7 +278,17 @@ const SuperadminDashboard = () => {
           </div>
         </div>
 
-        <div className="stat-card" onClick={() => setActiveTab('customers')} style={{ cursor: 'pointer' }}>
+        <div
+          className="stat-card"
+          onClick={() => setActiveTab('customers')}
+          style={{
+            cursor: 'pointer',
+            border: activeTab === 'customers' ? '2.5px solid #047857' : '1.5px solid #e2e8f0',
+            boxShadow: activeTab === 'customers' ? '0 8px 20px -4px rgba(4, 120, 87, 0.25)' : 'none',
+            transform: activeTab === 'customers' ? 'translateY(-3px)' : 'none',
+            transition: 'all 0.2s ease'
+          }}
+        >
           <div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700 }}>Total Customers</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#047857' }}>{customerList.length}</div>
@@ -268,7 +298,17 @@ const SuperadminDashboard = () => {
           </div>
         </div>
 
-        <div className="stat-card" onClick={() => setActiveTab('tickets')} style={{ cursor: 'pointer' }}>
+        <div
+          className="stat-card"
+          onClick={() => setActiveTab('tickets')}
+          style={{
+            cursor: 'pointer',
+            border: activeTab === 'tickets' ? '2.5px solid #1e40af' : '1.5px solid #e2e8f0',
+            boxShadow: activeTab === 'tickets' ? '0 8px 20px -4px rgba(30, 64, 175, 0.25)' : 'none',
+            transform: activeTab === 'tickets' ? 'translateY(-3px)' : 'none',
+            transition: 'all 0.2s ease'
+          }}
+        >
           <div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700 }}>Total System Tickets</div>
             <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#1e40af' }}>{tickets.length}</div>
@@ -280,81 +320,105 @@ const SuperadminDashboard = () => {
       </div>
 
       {/* Tabs Navigation Header */}
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '0.85rem', marginBottom: '1.75rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.85rem', flexWrap: 'wrap' }}>
         <button
           onClick={() => setActiveTab('pending')}
           style={{
-            backgroundColor: activeTab === 'pending' ? '#a3e635' : '#f1f5f9',
-            color: '#000000',
-            fontWeight: 800,
-            fontSize: '0.9rem',
-            padding: '0.625rem 1.25rem',
+            backgroundColor: activeTab === 'pending' ? '#032d1f' : '#ffffff',
+            color: activeTab === 'pending' ? '#a3e635' : '#475569',
+            fontWeight: activeTab === 'pending' ? 900 : 700,
+            fontSize: '0.875rem',
+            padding: '0.65rem 1.35rem',
             borderRadius: '9999px',
-            border: 'none',
+            border: activeTab === 'pending' ? '2px solid #032d1f' : '1.5px solid #cbd5e1',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '8px',
+            boxShadow: activeTab === 'pending'
+              ? '0 6px 16px -2px rgba(3, 45, 31, 0.35), 0 0 0 3px rgba(163, 230, 53, 0.4)'
+              : '0 2px 4px rgba(0, 0, 0, 0.03)',
+            transform: activeTab === 'pending' ? 'translateY(-2px)' : 'none',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
-          <UserCheck size={16} /> Admin Approvals Tab ({pendingAdmins.length})
+          <UserCheck size={16} style={{ color: activeTab === 'pending' ? '#a3e635' : '#64748b' }} />
+          Admin Approvals Tab ({pendingAdmins.length})
         </button>
 
         <button
           onClick={() => setActiveTab('admins')}
           style={{
-            backgroundColor: activeTab === 'admins' ? '#a3e635' : '#f1f5f9',
-            color: '#000000',
-            fontWeight: 800,
-            fontSize: '0.9rem',
-            padding: '0.625rem 1.25rem',
+            backgroundColor: activeTab === 'admins' ? '#032d1f' : '#ffffff',
+            color: activeTab === 'admins' ? '#a3e635' : '#475569',
+            fontWeight: activeTab === 'admins' ? 900 : 700,
+            fontSize: '0.875rem',
+            padding: '0.65rem 1.35rem',
             borderRadius: '9999px',
-            border: 'none',
+            border: activeTab === 'admins' ? '2px solid #032d1f' : '1.5px solid #cbd5e1',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '8px',
+            boxShadow: activeTab === 'admins'
+              ? '0 6px 16px -2px rgba(3, 45, 31, 0.35), 0 0 0 3px rgba(163, 230, 53, 0.4)'
+              : '0 2px 4px rgba(0, 0, 0, 0.03)',
+            transform: activeTab === 'admins' ? 'translateY(-2px)' : 'none',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
-          <Shield size={16} /> Approved Admins ({approvedAdmins.length})
+          <Shield size={16} style={{ color: activeTab === 'admins' ? '#a3e635' : '#64748b' }} />
+          Approved Admins ({approvedAdmins.length})
         </button>
 
         <button
           onClick={() => setActiveTab('customers')}
           style={{
-            backgroundColor: activeTab === 'customers' ? '#a3e635' : '#f1f5f9',
-            color: '#000000',
-            fontWeight: 800,
-            fontSize: '0.9rem',
-            padding: '0.625rem 1.25rem',
+            backgroundColor: activeTab === 'customers' ? '#032d1f' : '#ffffff',
+            color: activeTab === 'customers' ? '#a3e635' : '#475569',
+            fontWeight: activeTab === 'customers' ? 900 : 700,
+            fontSize: '0.875rem',
+            padding: '0.65rem 1.35rem',
             borderRadius: '9999px',
-            border: 'none',
+            border: activeTab === 'customers' ? '2px solid #032d1f' : '1.5px solid #cbd5e1',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '8px',
+            boxShadow: activeTab === 'customers'
+              ? '0 6px 16px -2px rgba(3, 45, 31, 0.35), 0 0 0 3px rgba(163, 230, 53, 0.4)'
+              : '0 2px 4px rgba(0, 0, 0, 0.03)',
+            transform: activeTab === 'customers' ? 'translateY(-2px)' : 'none',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
-          <Users size={16} /> Manage Customers ({customerList.length})
+          <Users size={16} style={{ color: activeTab === 'customers' ? '#a3e635' : '#64748b' }} />
+          Manage Customers ({customerList.length})
         </button>
 
         <button
           onClick={() => setActiveTab('tickets')}
           style={{
-            backgroundColor: activeTab === 'tickets' ? '#a3e635' : '#f1f5f9',
-            color: '#000000',
-            fontWeight: 800,
-            fontSize: '0.9rem',
-            padding: '0.625rem 1.25rem',
+            backgroundColor: activeTab === 'tickets' ? '#032d1f' : '#ffffff',
+            color: activeTab === 'tickets' ? '#a3e635' : '#475569',
+            fontWeight: activeTab === 'tickets' ? 900 : 700,
+            fontSize: '0.875rem',
+            padding: '0.65rem 1.35rem',
             borderRadius: '9999px',
-            border: 'none',
+            border: activeTab === 'tickets' ? '2px solid #032d1f' : '1.5px solid #cbd5e1',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '8px',
+            boxShadow: activeTab === 'tickets'
+              ? '0 6px 16px -2px rgba(3, 45, 31, 0.35), 0 0 0 3px rgba(163, 230, 53, 0.4)'
+              : '0 2px 4px rgba(0, 0, 0, 0.03)',
+            transform: activeTab === 'tickets' ? 'translateY(-2px)' : 'none',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
-          <Ticket size={16} /> All System Tickets ({tickets.length})
+          <Ticket size={16} style={{ color: activeTab === 'tickets' ? '#a3e635' : '#64748b' }} />
+          All System Tickets ({tickets.length})
         </button>
       </div>
 

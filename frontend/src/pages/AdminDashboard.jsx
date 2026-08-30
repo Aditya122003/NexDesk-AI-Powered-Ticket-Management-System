@@ -272,36 +272,46 @@ const AdminDashboard = () => {
           <button
             onClick={() => setActiveTab('tickets')}
             style={{
-              backgroundColor: activeTab === 'tickets' ? '#a3e635' : '#f1f5f9',
-              color: '#000000',
-              fontWeight: 800,
-              padding: '0.6rem 1.2rem',
+              backgroundColor: activeTab === 'tickets' ? '#032d1f' : '#ffffff',
+              color: activeTab === 'tickets' ? '#a3e635' : '#475569',
+              fontWeight: activeTab === 'tickets' ? 900 : 700,
+              padding: '0.65rem 1.35rem',
               borderRadius: '9999px',
-              border: 'none',
+              border: activeTab === 'tickets' ? '2px solid #032d1f' : '1.5px solid #cbd5e1',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '8px',
+              boxShadow: activeTab === 'tickets'
+                ? '0 6px 16px -2px rgba(3, 45, 31, 0.35), 0 0 0 3px rgba(163, 230, 53, 0.4)'
+                : '0 2px 4px rgba(0, 0, 0, 0.03)',
+              transform: activeTab === 'tickets' ? 'translateY(-2px)' : 'none',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
-            <TicketIcon size={16} /> Manage Tickets
+            <TicketIcon size={16} style={{ color: activeTab === 'tickets' ? '#a3e635' : '#64748b' }} /> Manage Tickets
           </button>
           <button
             onClick={() => setActiveTab('users')}
             style={{
-              backgroundColor: activeTab === 'users' ? '#a3e635' : '#f1f5f9',
-              color: '#000000',
-              fontWeight: 800,
-              padding: '0.6rem 1.2rem',
+              backgroundColor: activeTab === 'users' ? '#032d1f' : '#ffffff',
+              color: activeTab === 'users' ? '#a3e635' : '#475569',
+              fontWeight: activeTab === 'users' ? 900 : 700,
+              padding: '0.65rem 1.35rem',
               borderRadius: '9999px',
-              border: 'none',
+              border: activeTab === 'users' ? '2px solid #032d1f' : '1.5px solid #cbd5e1',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '8px',
+              boxShadow: activeTab === 'users'
+                ? '0 6px 16px -2px rgba(3, 45, 31, 0.35), 0 0 0 3px rgba(163, 230, 53, 0.4)'
+                : '0 2px 4px rgba(0, 0, 0, 0.03)',
+              transform: activeTab === 'users' ? 'translateY(-2px)' : 'none',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
-            <Users size={16} /> User Accounts ({allUsers.length})
+            <Users size={16} style={{ color: activeTab === 'users' ? '#a3e635' : '#64748b' }} /> User Accounts ({allUsers.length})
           </button>
           <button
             onClick={() => navigate('/admin/analytics')}
