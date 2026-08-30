@@ -102,11 +102,37 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
-// Pre-save hook to generate ticketId (e.g. TCK-1001) if not set
+// Collision-proof Pre-save hook to generate unique ticketId (e.g. TCK-1001)
 ticketSchema.pre('save', async function (next) {
   if (!this.ticketId) {
-    const count = await mongoose.model('Ticket').countDocuments();
-    this.ticketId = `TCK-${1000 + count + 1}`;
+    try {
+      // Find latest ticket to get highest reference sequence number
+      const lastTicket = await mongoose.model('Ticket')
+        .findOne({}, { ticketId: 1 })
+        .sort({ createdAt: -1, _id: -1 });
+
+      let nextNum = 1001;
+      if (lastTicket && lastTicket.ticketId) {
+        const match = lastTicket.ticketId.match(/TCK-(\d+)/);
+        if (match) {
+          nextNum = parseInt(match[1], 10) + 1;
+        }
+      }
+
+      // Loop safeguard to ensure candidateId is 100% unique in DB
+      let candidateId = `TCK-${nextNum}`;
+      let exists = await mongoose.model('Ticket').exists({ ticketId: candidateId });
+      while (exists) {
+        nextNum += 1;
+        candidateId = `TCK-${nextNum}`;
+        exists = await mongoose.model('Ticket').exists({ ticketId: candidateId });
+      }
+
+      this.ticketId = candidateId;
+    } catch (err) {
+      console.error('[TicketModel] Auto-id generation error, using fallback:', err);
+      this.ticketId = `TCK-${Date.now().toString().slice(-6)}`;
+    }
   }
   next();
 });
