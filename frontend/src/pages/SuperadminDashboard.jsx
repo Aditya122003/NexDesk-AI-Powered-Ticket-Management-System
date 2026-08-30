@@ -9,7 +9,7 @@ import ConfirmModal from '../components/ConfirmModal';
 import PriorityBadge from '../components/PriorityBadge';
 import CategoryBadge from '../components/CategoryBadge';
 import {
-  Crown, Shield, Users, UserCheck, Ticket as TicketIcon, BarChart3, Search, RefreshCw,
+  Crown, Shield, Users, UserCheck, Ticket, Ticket as TicketIcon, BarChart3, Search, RefreshCw,
   Trash2, CheckCircle, XCircle, Mail, AlertTriangle, Filter, Plus, Send, X,
   Download, LayoutGrid, List
 } from 'lucide-react';
