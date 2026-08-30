@@ -127,7 +127,7 @@ const login = async (req, res, next) => {
 
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials. Incorrect password.' });
+      return res.status(401).json({ success: false, message: 'Invalid credentials.' });
     }
 
     // Enforce Superadmin Approval check for Admin accounts
